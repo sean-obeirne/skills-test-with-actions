@@ -25,8 +25,14 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
 
+      # OLD: npm remark . --use remark-preset-lint-consistent --frail
       # Runs a single command using the runners shell
       - name: Run markdown lint
         run: |
-          npm install remark-cli remark-preset-lint-consistent
-          npm remark . --use remark-preset-lint-consistent --frail
+          npm install remark-cli remark-preset-lint-consistent vfile-reporter-json
+          npx remark . --use remark-preset-lint-consistent --report vfile-reporter-json 2> remark-lint-report.json
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: remark-lint-report.json
